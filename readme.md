@@ -620,6 +620,7 @@ Elle gère également l’état du monstre pendant un tour (attaque, changement 
 | `getDef()` | Retourne les points de défense du monstre |
 | `getLevel()` | Retourne le niveau du monstre |
 | `setPosition(pos:Position)` | Définit la position du monstre (ATK/DEF, face recto/verso) |
+| `setAttack()` | Permet au monstre d'initialiser l'attaque |
 | `resetTurnFlags()` | Réinitialise les indicateurs de tour (`hasAttackedThisTurn`, `hasChangedPositionThisTurn`) |
 | `activateEffect()` | Active l’effet du monstre (si applicable) |
 | `increaseAtk(amount:int)` | Augmente les points d’attaque du monstre |
