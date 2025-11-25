@@ -1,0 +1,4 @@
+# Ignorer SDK JavaFX et binaires lourds
+*.dll
+*.so
+javafx/
