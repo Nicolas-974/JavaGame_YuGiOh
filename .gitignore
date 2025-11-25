@@ -1,4 +1,40 @@
-# Ignorer SDK JavaFX et binaires lourds
+# --- Java ---
+*.class
+*.jar
+*.war
+*.ear
+
+# --- Logs ---
+*.log
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+
+# --- IDEs ---
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# VS Code
+.vscode/
+
+# --- Build tools ---
+# Maven
+target/
+
+# Gradle
+.gradle/
+build/
+
+# --- JavaFX SDK & binaires lourds ---
 *.dll
 *.so
+*.dylib
 javafx/
