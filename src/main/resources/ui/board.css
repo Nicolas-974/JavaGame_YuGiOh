@@ -1,0 +1,183 @@
+/* Fond général du plateau */
+.root {
+    -fx-background-color: linear-gradient(to bottom, #0d0d0d, #1a1a1a);
+}
+
+/* Zones Monstres */
+.monster-zone {
+    -fx-border-color: #ff0000;
+    -fx-border-width: 2;
+    -fx-background-color: rgba(255, 0, 0, 0.2);
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+}
+
+/* Zones Magie/Piège */
+.spelltrap-zone {
+    -fx-border-color: #0000ff;
+    -fx-border-width: 2;
+    -fx-background-color: rgba(0, 0, 255, 0.2);
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+}
+
+.monster-zone, .spelltrap-zone {
+    -fx-padding: 4 6; /* était implicite, réduit le contenu interne */
+    -fx-font-size: 11px; /* léger downscale pour tenir dans 138px */
+}
+
+/* Deck, Extra Deck, Cimetière, Bannies */
+.deck-zone, .extra-zone, .graveyard-zone, .banished-zone {
+    -fx-border-color: #ffffff;
+    -fx-border-width: 2;
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+
+    -fx-padding: 4 6;
+    -fx-font-size: 11px;
+
+}
+
+/* Zone Terrain */
+.terrain-zone {
+    -fx-border-color: #00ff00;
+    -fx-border-width: 2;
+    -fx-background-color: rgba(0, 255, 0, 0.2);
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+}
+
+/* === Styles LP intégrés === */
+
+/* Barre LP */
+.lp-bar {
+    -fx-background-color: rgba(0,0,0,0.6);
+    /* -fx-padding: 15; */
+    -fx-spacing: 40;
+    -fx-border-color: white;
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+/* Labels LP */
+.lp-label {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-padding: 5;
+}
+
+/* LP Joueur 1 (rouge) */
+.lp-j1 {
+    -fx-text-fill: #ff3333;
+}
+
+/* LP Joueur 2 (bleu) */
+.lp-j2 {
+    -fx-text-fill: #3399ff;
+}
+
+/* Champs de saisie */
+.lp-input {
+    -fx-pref-width: 120;
+    -fx-font-size: 14px;
+    -fx-background-color: #222;
+    -fx-text-fill: white;
+    -fx-border-color: gray;
+    -fx-border-radius: 5;
+}
+
+/* Boutons + / - */
+.lp-toggle {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-background-color: #444;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+}
+
+.lp-toggle:hover {
+    -fx-background-color: #666;
+}
+
+
+
+
+.tour-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: darkred;
+}
+
+.active-player {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: royalblue;
+}
+
+.phase-label {
+    -fx-font-size: 16px;
+    -fx-font-style: italic;
+    -fx-text-fill: goldenrod;
+}
+
+.button-fin-tour {
+    -fx-font-size: 14px;
+    -fx-padding: 10;
+    -fx-background-color: lightcoral;
+    -fx-text-fill: white;
+    -fx-margin: 0; /* neutralise toute marge externe si ajoutée ailleurs */
+
+}
+
+.button-fin-tour:hover {
+    -fx-background-color: orangered;
+}
+
+.hand-zone {
+    -fx-spacing: 8;      /* était 10 dans HBox, tu peux aussi le laisser à 10 si tu préfères */
+    -fx-padding: 4 0;    /* moins de marge verticale */
+}
+
+.scroll-pane {
+    -fx-background: #1e1e1e;        /* fond sombre */
+    -fx-background-color: #1e1e1e;  /* couleur de fond */
+    -fx-border-color: #333333;      /* bordure discrète */
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: #1e1e1e;  /* fond de la zone de contenu */
+}
+
+.scroll-bar:horizontal, .scroll-bar:vertical {
+    -fx-background-color: #2a2a2a;  /* couleur des barres */
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #555555;  /* couleur du curseur */
+    -fx-background-radius: 5;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #777777;  /* couleur au survol */
+}
+
+.dark-scroll {
+    -fx-background-color: #1e1e1e;
+}
+
+.dark-scroll .viewport {
+    -fx-background-color: #1e1e1e;
+}
+
+.card-selected {
+    -fx-effect: dropshadow(gaussian, gold, 20, 0.7, 0, 0);
+    -fx-border-color: gold;
+    -fx-border-width: 3;
+    -fx-border-radius: 5;
+}

@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"BanishedZone"},{"l":"Board"},{"l":"Bot"},{"l":"Card"},{"l":"Deck"},{"l":"Game"},{"l":"Graveyard"},{"l":"Hand"},{"l":"loader"},{"l":"Player"},{"l":"ui"},{"l":"util"}];updateSearchResults();
