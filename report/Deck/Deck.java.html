@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Deck.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">Deck</a> &gt; <span class="el_source">Deck.java</span></div><h1>Deck.java</h1><pre class="source lang-java linenums">package Deck;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import Card.Card;
+import Card.MonsterCard;
+import Card.SpellCard;
+import Card.TrapCard;
+import Card.Effect;
+import Player.Player;
+
+/**
+ * Classe représentant la pioche principale d’un joueur.
+ */
+public class Deck {
+
+    // --- Attributs ---
+    private List&lt;Card&gt; cards;
+
+    // --- Constructeurs ---
+<span class="fc" id="L23">    public Deck(List&lt;Card&gt; initialCards) {</span>
+<span class="fc" id="L24">        this.cards = new ArrayList&lt;&gt;(initialCards);</span>
+<span class="fc" id="L25">    }</span>
+
+<span class="fc" id="L27">    public Deck() {</span>
+        // initialisation minimale, par exemple une liste vide
+<span class="fc" id="L29">        this.cards = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L30">    }</span>
+
+    /**
+     * Constructeur qui crée un deck par défaut avec quelques cartes de test.
+     * @param owner joueur propriétaire des cartes
+     */
+<span class="fc" id="L36">    public Deck(Player owner) {</span>
+<span class="fc" id="L37">        this.cards = new ArrayList&lt;&gt;();</span>
+
+        // Exemple de monstre normal
+<span class="fc" id="L40">        cards.add(new MonsterCard(</span>
+            &quot;Blue-Eyes White Dragon&quot;,
+            &quot;Legendary dragon&quot;,
+            1,
+            owner,
+            3000, 2500, 8,
+            &quot;LIGHT&quot;, &quot;Dragon&quot;, &quot;Normal&quot;
+        ));
+
+        // Exemple de monstre avec effet
+<span class="fc" id="L50">        Effect reviveEffect = new Effect(&quot;Revive a monster&quot;, &quot;Special Summon&quot;);</span>
+<span class="fc" id="L51">        cards.add(new MonsterCard(</span>
+            &quot;Dark Magician of Chaos&quot;,
+            &quot;Wizard with revival powers&quot;,
+            2,
+            owner,
+            2800, 2600, 8,
+            &quot;DARK&quot;, &quot;Spellcaster&quot;, &quot;Effect&quot;,
+            reviveEffect, &quot;Continuous&quot;
+        ));
+
+        // Exemple de carte Magie
+<span class="fc" id="L62">        Effect spellEffect = new Effect(&quot;Revives a monster from the Graveyard&quot;, &quot;Special Summon&quot;);</span>
+<span class="fc" id="L63">        cards.add(new SpellCard(</span>
+            &quot;Monster Reborn&quot;,
+            &quot;Revive a monster&quot;,
+            3,
+            owner,
+            &quot;Normal&quot;,
+            spellEffect,
+            false
+        ));
+
+        // Exemple de carte Piège
+<span class="fc" id="L74">        Effect trapEffect = new Effect(&quot;Negates an attack&quot;, &quot;Counter&quot;);</span>
+<span class="fc" id="L75">        cards.add(new TrapCard(</span>
+            &quot;Mirror Force&quot;,
+            &quot;Destroy all attack position monsters your opponent controls&quot;,
+            4,
+            owner,
+            &quot;Normal&quot;,
+            trapEffect,
+            false
+        ));
+<span class="fc" id="L84">    }</span>
+
+    // --- Méthodes principales ---
+    public void shuffle() {
+<span class="fc" id="L88">        Collections.shuffle(cards);</span>
+<span class="fc" id="L89">        System.out.println(&quot;Le Deck est mélangé.&quot;);</span>
+<span class="fc" id="L90">    }</span>
+
+    public Card draw() {
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (isEmpty()) {</span>
+<span class="fc" id="L94">            System.out.println(&quot;Le Deck est vide, impossible de piocher.&quot;);</span>
+<span class="fc" id="L95">            return null;</span>
+        }
+<span class="fc" id="L97">        Card top = cards.remove(0);</span>
+<span class="fc" id="L98">        System.out.println(&quot;Carte piochée: &quot; + top.getName());</span>
+<span class="fc" id="L99">        return top;</span>
+    }
+
+    public void addCard(Card c) {
+<span class="fc" id="L103">        cards.add(c);</span>
+<span class="fc" id="L104">    }</span>
+
+    public boolean isEmpty() {
+<span class="fc" id="L107">        return cards.isEmpty();</span>
+    }
+
+    public int size() {
+<span class="fc" id="L111">        return cards.size();</span>
+    }
+
+    public Card peek() {
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (isEmpty()) return null;</span>
+<span class="fc" id="L116">        return cards.get(0);</span>
+    }
+
+    public boolean removeCard(Card c) {
+<span class="fc" id="L120">        return cards.remove(c);</span>
+    }
+
+    public void reset(List&lt;Card&gt; newCards) {
+<span class="fc" id="L124">        this.cards = new ArrayList&lt;&gt;(newCards);</span>
+<span class="fc" id="L125">        System.out.println(&quot;Le Deck a été réinitialisé.&quot;);</span>
+<span class="fc" id="L126">    }</span>
+
+    public List&lt;Card&gt; getCards() {
+<span class="fc" id="L129">        return cards;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

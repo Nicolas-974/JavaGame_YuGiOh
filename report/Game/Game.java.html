@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Game.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">Game</a> &gt; <span class="el_source">Game.java</span></div><h1>Game.java</h1><pre class="source lang-java linenums">package Game;
+
+import Deck.Deck;
+import Player.Player;
+
+/**
+ * Classe représentant une partie Yu-Gi-Oh!
+ * Elle orchestre le déroulement du duel : joueurs, phases, tours, conditions de victoire.
+ */
+public class Game {
+
+    // --- Attributs ---
+    private Player player1;
+    private Player player2;
+    private Player currentPlayer;
+    private Phase currentPhase;
+    private int turnCount;
+    private boolean isGameOver;
+
+    // --- Constructeur ---
+<span class="fc" id="L21">    public Game(Player player1, Player player2) {</span>
+<span class="fc" id="L22">        this.player1 = player1;</span>
+<span class="fc" id="L23">        this.player2 = player2;</span>
+<span class="fc" id="L24">        this.currentPlayer = player1; // par défaut, player1 commence</span>
+<span class="fc" id="L25">        this.currentPhase = Phase.DRAW; // première phase du tour</span>
+<span class="fc" id="L26">        this.turnCount = 1;</span>
+<span class="fc" id="L27">        this.isGameOver = false;</span>
+<span class="fc" id="L28">    }</span>
+
+    // --- Méthodes principales ---
+    public void startGame() {
+<span class="fc" id="L32">        System.out.println(&quot;La partie commence entre &quot; + player1.getName() + &quot; et &quot; + player2.getName());</span>
+<span class="fc" id="L33">        player1.setDeck(new Deck(/* paramètres */));</span>
+<span class="fc" id="L34">        player2.setDeck(new Deck(/* paramètres */));</span>
+<span class="fc" id="L35">        currentPlayer = player1;</span>
+<span class="fc" id="L36">        player1.drawCard();</span>
+<span class="fc" id="L37">        player2.drawCard();</span>
+<span class="fc" id="L38">        turnCount = 1;</span>
+<span class="fc" id="L39">        isGameOver = false;</span>
+
+<span class="fc" id="L41">    }</span>
+
+    public Phase getCurrentPhase() {
+<span class="fc" id="L44">        return currentPhase;</span>
+    }
+
+    public void nextPhase() {
+<span class="fc" id="L48">        currentPhase = currentPhase.next(); // nécessite enum Phase avec méthode next()</span>
+<span class="fc" id="L49">        System.out.println(&quot;Phase suivante: &quot; + currentPhase);</span>
+<span class="fc" id="L50">    }</span>
+
+    public void endTurn() {
+<span class="fc" id="L53">        currentPlayer.endTurn();</span>
+<span class="fc" id="L54">        resetPhase();</span>
+<span class="fc" id="L55">        switchPlayer();</span>
+<span class="fc" id="L56">        incrementTurn();</span>
+<span class="fc" id="L57">        System.out.println(&quot;Fin du tour. C'est maintenant au tour de &quot; + currentPlayer.getName());</span>
+<span class="fc" id="L58">    }</span>
+
+    public Player getOpponent() {
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        return (currentPlayer == player1) ? player2 : player1;</span>
+    }
+
+    public Player getCurrentPlayer() {
+<span class="fc" id="L65">        return currentPlayer;</span>
+    }
+
+    public void checkWinCondition() {
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if (!player1.isAlive()) {</span>
+<span class="fc" id="L70">            endGame(player2);</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        } else if (!player2.isAlive()) {</span>
+<span class="nc" id="L72">            endGame(player1);</span>
+        }
+<span class="fc" id="L74">    }</span>
+
+    public void switchPlayer() {
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        currentPlayer = (currentPlayer == player1) ? player2 : player1;</span>
+<span class="fc" id="L78">    }</span>
+
+    public int getTurnCount() {
+<span class="fc" id="L81">        return turnCount;</span>
+    }
+
+    public void incrementTurn() {
+<span class="fc" id="L85">        turnCount++;</span>
+<span class="fc" id="L86">    }</span>
+
+    public void resetPhase() {
+<span class="fc" id="L89">        currentPhase = Phase.DRAW;</span>
+<span class="fc" id="L90">    }</span>
+
+    public void endGame(Player winner) {
+<span class="fc" id="L93">        isGameOver = true;</span>
+<span class="fc" id="L94">        System.out.println(&quot;La partie est terminée ! Le vainqueur est &quot; + winner.getName());</span>
+<span class="fc" id="L95">    }</span>
+
+    public boolean isOver() {
+<span class="fc" id="L98">        return isGameOver;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

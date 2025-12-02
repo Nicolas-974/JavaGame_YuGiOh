@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MonsterCard.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">Card</a> &gt; <span class="el_source">MonsterCard.java</span></div><h1>MonsterCard.java</h1><pre class="source lang-java linenums">package Card;
+
+import Player.Player;
+
+/**
+ * Représente une carte Monstre dans le jeu Yu-Gi-Oh!.
+ * &lt;p&gt;
+ * La classe {@code MonsterCard} hérite de {@link Card} et ajoute des attributs
+ * spécifiques aux monstres (ATK, DEF, Niveau, Attribut, Type, Position, Effets).
+ * Elle gère également l’état du monstre pendant un tour (attaque, changement de position)
+ * et permet la modification contrôlée de ses statistiques via des effets.
+ *
+ * &lt;h2&gt;Responsabilités&lt;/h2&gt;
+ * &lt;ul&gt;
+ *   &lt;li&gt;Stocker les caractéristiques d’un monstre (ATK, DEF, Niveau, Attribut, Type, Sous-type).&lt;/li&gt;
+ *   &lt;li&gt;Gérer la position du monstre (ATK/DEF) et ses actions limitées par tour.&lt;/li&gt;
+ *   &lt;li&gt;Permettre la modification des statistiques (ATK, DEF, Niveau, Attribut).&lt;/li&gt;
+ *   &lt;li&gt;Activer un effet si le monstre en possède un.&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * &lt;h2&gt;Relations&lt;/h2&gt;
+ * &lt;ul&gt;
+ *   &lt;li&gt;Héritage : hérite de la classe abstraite {@link Card}.&lt;/li&gt;
+ *   &lt;li&gt;Association : peut être lié à un {@link Effect} pour définir un effet spécial.&lt;/li&gt;
+ *   &lt;li&gt;Interaction : contrôlé par un {@link Player}.&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * @author Nicolas
+ * @version 1.0
+ */
+public class MonsterCard extends Card {
+
+    /** Points d’attaque du monstre. */
+    private int atk;
+
+    /** Points de défense du monstre. */
+    private int def;
+
+    /** Niveau du monstre (étoiles). */
+    private int level;
+
+    /** Attribut du monstre (ex : DARK, LIGHT, FIRE...). */
+    private String attribute;
+
+    /** Type générique (ex : Magicien, Guerrier, Dragon...). */
+    private String type;
+
+    /** Sous-type (ex : Normal, Effet, Fusion, Synchro, XYZ, Lien). */
+    private String subType;
+
+    /** Catégorie de monstre (ex : Normal, Effet, etc.). */
+    private String monsterType;
+
+    /** Effet associé au monstre (si applicable). */
+    private Effect effect;
+
+    /** Type d’effet (continu, déclencheur, rapide, etc.). */
+    private String effectType;
+
+    /** Position actuelle du monstre (ATK ou DEF). */
+    private Position position;
+
+    /** Indique si le monstre a déjà attaqué ce tour. */
+    private boolean hasAttackedThisTurn;
+
+    /** Indique si le monstre a déjà changé de position ce tour. */
+    private boolean hasChangedPositionThisTurn;
+
+    /**
+     * Crée un monstre normal (sans effet).
+     *
+     * @param name        nom du monstre
+     * @param description description du monstre
+     * @param cardId      identifiant unique
+     * @param owner       joueur propriétaire
+     * @param atk         points d’attaque
+     * @param def         points de défense
+     * @param level       niveau (étoiles)
+     * @param attribute   attribut (ex : DARK, LIGHT)
+     * @param type        type générique (ex : Magicien, Guerrier)
+     * @param monsterType catégorie de monstre (ex : Normal)
+     */
+    public MonsterCard(String name, String description, int cardId, Player owner,
+                       int atk, int def, int level,
+                       String attribute, String type, String monsterType) {
+<span class="fc" id="L86">        super(name, description, cardId, owner);</span>
+<span class="fc" id="L87">        this.atk = atk;</span>
+<span class="fc" id="L88">        this.def = def;</span>
+<span class="fc" id="L89">        this.level = level;</span>
+<span class="fc" id="L90">        this.attribute = attribute;</span>
+<span class="fc" id="L91">        this.type = type;</span>
+<span class="fc" id="L92">        this.monsterType = monsterType;</span>
+<span class="fc" id="L93">        this.position = Position.ATTACK; // par défaut</span>
+<span class="fc" id="L94">        this.hasAttackedThisTurn = false;</span>
+<span class="fc" id="L95">        this.hasChangedPositionThisTurn = false;</span>
+<span class="fc" id="L96">    }</span>
+
+    /**
+     * Crée un monstre avec effet.
+     *
+     * @param name        nom du monstre
+     * @param description description du monstre
+     * @param cardId      identifiant unique
+     * @param owner       joueur propriétaire
+     * @param atk         points d’attaque
+     * @param def         points de défense
+     * @param level       niveau (étoiles)
+     * @param attribute   attribut
+     * @param type        type générique
+     * @param monsterType catégorie de monstre
+     * @param effect      effet associé
+     * @param effectType  type d’effet
+     */
+    public MonsterCard(String name, String description, int cardId, Player owner,
+                       int atk, int def, int level,
+                       String attribute, String type, String monsterType,
+                       Effect effect, String effectType) {
+<span class="fc" id="L118">        this(name, description, cardId, owner, atk, def, level, attribute, type, monsterType);</span>
+<span class="fc" id="L119">        this.effect = effect;</span>
+<span class="fc" id="L120">        this.effectType = effectType;</span>
+<span class="fc" id="L121">    }</span>
+
+    /**
+     * Crée un monstre avec sous-type (sans effet).
+     *
+     * @param name        nom du monstre
+     * @param description description du monstre
+     * @param cardId      identifiant unique
+     * @param owner       joueur propriétaire
+     * @param atk         points d’attaque
+     * @param def         points de défense
+     * @param level       niveau (étoiles)
+     * @param attribute   attribut
+     * @param type        type générique
+     * @param subType     sous-type (ex : Normal, Fusion...)
+     * @param monsterType catégorie de monstre
+     */
+    public MonsterCard(String name, String description, int cardId, Player owner,
+                       int atk, int def, int level,
+                       String attribute, String type, String subType, String monsterType) {
+<span class="fc" id="L141">        super(name, description, cardId, owner);</span>
+<span class="fc" id="L142">        this.atk = atk;</span>
+<span class="fc" id="L143">        this.def = def;</span>
+<span class="fc" id="L144">        this.level = level;</span>
+<span class="fc" id="L145">        this.attribute = attribute;</span>
+<span class="fc" id="L146">        this.type = type;</span>
+<span class="fc" id="L147">        this.subType = subType;</span>
+<span class="fc" id="L148">        this.monsterType = monsterType;</span>
+<span class="fc" id="L149">        this.position = Position.ATTACK; // par défaut</span>
+<span class="fc" id="L150">        this.hasAttackedThisTurn = false;</span>
+<span class="fc" id="L151">        this.hasChangedPositionThisTurn = false;</span>
+<span class="fc" id="L152">    }</span>
+
+    /**
+     * Crée un monstre avec effet et sous-type.
+     *
+     * @param name        nom du monstre
+     * @param description description du monstre
+     * @param cardId      identifiant unique
+     * @param owner       joueur propriétaire
+     * @param atk         points d’attaque
+     * @param def         points de défense
+     * @param level       niveau (étoiles)
+     * @param attribute   attribut
+     * @param type        type générique
+     * @param subType     sous-type
+     * @param monsterType catégorie de monstre
+     * @param effect      effet associé
+     * @param effectType  type d’effet
+     */
+    public MonsterCard(String name, String description, int cardId, Player owner,
+                       int atk, int def, int level,
+                       String attribute, String type, String subType, String monsterType,
+                       Effect effect, String effectType) {
+<span class="fc" id="L175">        this(name, description, cardId, owner, atk, def, level, attribute, type, subType, monsterType);</span>
+<span class="fc" id="L176">        this.effect = effect;</span>
+<span class="fc" id="L177">        this.effectType = effectType;</span>
+<span class="fc" id="L178">    }</span>
+
+    /** @return les points d’attaque du monstre */
+<span class="fc" id="L181">    public int getAtk() { return atk; }</span>
+
+    /** @return les points de défense du monstre */
+<span class="fc" id="L184">    public int getDef() { return def; }</span>
+
+    /** @return le niveau du monstre */
+<span class="fc" id="L187">    public int getLevel() { return level; }</span>
+
+    /** @return l’attribut du monstre */
+<span class="fc" id="L190">    public String getAttribute() { return attribute; }</span>
+
+    /** @return le type générique du monstre */
+<span class="fc" id="L193">    public String getType() { return type; }</span>
+
+    /** @return le sous-type du monstre */
+<span class="nc" id="L196">    public String getSubType() { return subType; }</span>
+
+    /** @return la catégorie du monstre */
+<span class="fc" id="L199">    public String getMonsterType() { return monsterType; }</span>
+
+    /** @return l’effet associé au monstre (si applicable) */
+<span class="fc" id="L202">    public Effect getEffect() { return effect; }</span>
+
+    /** @return le type d’effet du monstre */
+<span class="fc" id="L205">    public String getEffectType() { return effectType; }</span>
+
+    /** @return la position actuelle du monstre */
+<span class="fc" id="L208">    public Position getPosition() { return position; }</span>
+
+    /**
+     * Change la position du monstre (ATK/DEF).
+     * Ne peut être utilisé qu’une fois par tour.
+     *
+     * @param pos nouvelle position
+     */
+    public void setPosition(Position pos) {
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        if (!hasChangedPositionThisTurn) {</span>
+<span class="fc" id="L218">            this.position = pos;</span>
+<span class="fc" id="L219">            System.out.println(getName() + &quot; à changé sa position en mode &quot; + pos);</span>
+<span class="fc" id="L220">            this.hasChangedPositionThisTurn = true;</span>
+        } else {
+<span class="nc" id="L222">            System.out.println(getName() + &quot; a déjà changé de position ce tour !&quot;);</span>
+        }
+<span class="fc" id="L224">    }</span>
+
+    /**
+     * Déclare l'intention d'attaque du monstre.
+     * Ne peut être utilisé qu’une fois par tour.
+     */
+    public void setAttack() {
+<span class="fc bfc" id="L231" title="All 2 branches covered.">        if (!hasAttackedThisTurn) {</span>
+<span class="fc" id="L232">            System.out.println(getName() + &quot; à attaqué !&quot;);</span>
+<span class="fc" id="L233">            this.hasAttackedThisTurn = true;</span>
+        } else {
+<span class="fc" id="L235">            System.out.println(getName() + &quot; a déjà attaqué ce tour !&quot;);</span>
+        }
+<span class="fc" id="L237">    }</span>
+
+    /**
+     * Réinitialise les indicateurs de tour (attaque et changement de position),
+     * afin que le monstre puisse à nouveau agir.
+     */
+    public void resetTurnFlags() {
+<span class="fc" id="L244">        hasAttackedThisTurn = false;</span>
+<span class="fc" id="L245">        hasChangedPositionThisTurn = false;</span>
+<span class="fc" id="L246">        System.out.println(getName() + &quot; peut de nouveau attaquer ou changer sa position&quot;);</span>
+<span class="fc" id="L247">    }</span>
+
+    /** Augmente l’ATK du monstre. */
+<span class="fc" id="L250">    public void increaseAtk(int amount) { atk += amount; }</span>
+
+    /** Diminue l’ATK du monstre. */
+<span class="fc" id="L253">    public void decreaseAtk(int amount) { atk -= amount; }</span>
+
+    /** Augmente la DEF du monstre. */
+<span class="fc" id="L256">    public void increaseDef(int amount) { def += amount; }</span>
+
+    /** Diminue la DEF du monstre. */
+<span class="fc" id="L259">    public void decreaseDef(int amount) { def -= amount; }</span>
+
+    /** Change le niveau du monstre. */
+<span class="fc" id="L262">    public void changeLevel(int newLevel) { this.level = newLevel; }</span>
+
+    /** Change l’attribut du monstre. */
+<span class="fc" id="L265">    public void changeAttribute(String newAttribute) { this.attribute = newAttribute; }</span>
+
+    /**
+     * Change le joueur qui contrôle ce monstre.
+     *
+     * @param newOwner nouveau propriétaire
+     */
+    public void changeControl(Player newOwner) {
+<span class="fc" id="L273">        setOwner(newOwner);</span>
+<span class="fc" id="L274">        System.out.println(getName() + &quot; est maintenant contrôlé par &quot; + newOwner.getName());</span>
+<span class="fc" id="L275">    }</span>
+
+    /**
+     * Active l’effet du monstre si disponible.
+     * Sinon, indique que le monstre n’a pas d’effet.
+     */
+    @Override
+    public void activateEffect() {
+<span class="pc bpc" id="L283" title="1 of 2 branches missed.">        if (effect != null) {</span>
+<span class="fc" id="L284">            System.out.println(&quot;Activation de l'effet: &quot; + getDescription());</span>
+            // TODO: plus tard, appeler effect.activate()
+        } else {
+<span class="nc" id="L287">            System.out.println(getName() + &quot; n’a pas d’effet à activer.&quot;);</span>
+        }
+<span class="fc" id="L289">    }</span>
+
+    /**
+     * Retourne une représentation textuelle du monstre incluant
+     * ses caractéristiques et sa position.
+     *
+     * @return une chaîne décrivant le monstre
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L299">        String base = &quot;Duelliste &quot; + getOwner().getName() + &quot; joue: \n&quot; +</span>
+<span class="fc" id="L300">                getName() + &quot; - &quot; + getDescription() +</span>
+                &quot;\nATK: &quot; + atk + &quot; / DEF: &quot; + def + &quot; / Level: &quot; + level +
+                &quot;\nAttribute: &quot; + attribute + &quot; / Type: &quot; + type;
+
+        // Affiche le sous-type seulement s'il existe
+<span class="pc bpc" id="L305" title="1 of 4 branches missed.">        if (subType != null &amp;&amp; !subType.isEmpty()) {</span>
+<span class="fc" id="L306">            base += &quot; / SubType: &quot; + subType;</span>
+        }
+
+<span class="fc" id="L309">        base += &quot; / &quot; + monsterType + &quot; Card&quot; +</span>
+<span class="fc" id="L310">                &quot; / Password: &quot; + getCardId() +</span>
+                &quot;\nPosition: &quot; + position;
+
+<span class="fc bfc" id="L313" title="All 2 branches covered.">        if (effect != null) {</span>
+<span class="fc" id="L314">            base += &quot;\nEffet: &quot; + effect.getDescription() + &quot; (&quot; + effectType + &quot;)&quot;;</span>
+        }
+
+<span class="fc" id="L317">        return base;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

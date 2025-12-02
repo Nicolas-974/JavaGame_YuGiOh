@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TrapCard.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">Card</a> &gt; <span class="el_source">TrapCard.java</span></div><h1>TrapCard.java</h1><pre class="source lang-java linenums">package Card;
+import Player.Player;
+
+
+/**
+ * Représente une carte Piège dans le jeu Yu-Gi-Oh!.
+ * &lt;p&gt;
+ * La classe {@code TrapCard} hérite de {@link Card} et ajoute des attributs
+ * spécifiques aux cartes Piège, comme leur type (Normal, Contre, Continu),
+ * leur effet et leur caractère persistant ou non.
+ *
+ * &lt;h2&gt;Responsabilités&lt;/h2&gt;
+ * &lt;ul&gt;
+ *   &lt;li&gt;Stocker le type de la carte Piège.&lt;/li&gt;
+ *   &lt;li&gt;Gérer l’effet associé à la carte.&lt;/li&gt;
+ *   &lt;li&gt;Indiquer si la carte reste sur le terrain après activation (Piège Continu).&lt;/li&gt;
+ *   &lt;li&gt;Permettre l’activation de l’effet de la carte.&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * &lt;h2&gt;Relations&lt;/h2&gt;
+ * &lt;ul&gt;
+ *   &lt;li&gt;Héritage : hérite de la classe abstraite {@link Card}.&lt;/li&gt;
+ *   &lt;li&gt;Association : chaque carte Piège peut avoir un {@link Effect} spécifique.&lt;/li&gt;
+ *   &lt;li&gt;Interaction : posée face verso sur le {@code Board}, activée en réponse à des actions.&lt;/li&gt;
+ *   &lt;li&gt;Interaction : utilisée par un {@link Player} pour contrer, bloquer ou perturber l’adversaire.&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * @author Nicolas
+ * @version 1.0
+ */
+public class TrapCard extends Card {
+
+    /** Type de la carte Piège (ex : Normal, Contre, Continu). */
+    private String trapType;
+
+    /** Effet associé à la carte Piège. */
+    private Effect effect;
+
+    /** Indique si la carte Piège reste sur le terrain après activation (ex : Piège Continu). */
+    private boolean isContinuous;
+
+    /**
+     * Constructeur d’une carte Piège.
+     *
+     * @param name        nom de la carte
+     * @param description description ou effet de la carte
+     * @param cardId      identifiant unique
+     * @param owner       joueur propriétaire
+     * @param trapType    type de la carte Piège (Normal, Contre, Continu)
+     * @param effect      effet associé à la carte
+     * @param isContinuous true si la carte reste sur le terrain après activation
+     */
+    public TrapCard(String name, String description, int cardId, Player owner,
+                    String trapType, Effect effect, boolean isContinuous) {
+<span class="fc" id="L55">        super(name, description, cardId, owner);</span>
+<span class="fc" id="L56">        this.trapType = trapType;</span>
+<span class="fc" id="L57">        this.effect = effect;</span>
+<span class="fc" id="L58">        this.isContinuous = isContinuous;</span>
+<span class="fc" id="L59">    }</span>
+
+    /** @return le type de la carte Piège */
+<span class="fc" id="L62">    public String getTrapType() { return trapType; }</span>
+
+    /** @return true si la carte Piège est continue (reste sur le terrain après activation) */
+<span class="fc" id="L65">    public boolean isContinuous() { return isContinuous; }</span>
+
+    /** @return l’effet associé à la carte Piège */
+<span class="fc" id="L68">    public Effect getEffect() { return effect; }</span>
+
+    /**
+     * Associe un effet à la carte Piège.
+     *
+     * @param effect l'effet à lier à cette carte
+     */
+    public void setEffect(Effect effect) {
+<span class="fc" id="L76">        this.effect = effect;</span>
+<span class="fc" id="L77">    }</span>
+
+    /**
+     * Active l’effet de la carte Piège.
+     * &lt;p&gt;
+     * Par défaut, affiche une description de l’effet. Désormais,
+     * appelle {@code effect.activate(...)} pour exécuter l’effet.
+     */
+    @Override
+    public void activateEffect() {
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (effect != null) {</span>
+<span class="fc" id="L88">            System.out.println(&quot;Activation de l'effet de Piège: &quot; + effect.getDescription());</span>
+            // Exemple d'appel : la carte elle-même est la source, cible optionnelle
+<span class="fc" id="L90">            effect.activate(this, null, getOwner().getBoard());</span>
+        } else {
+<span class="nc" id="L92">            System.out.println(getName() + &quot; n’a pas d’effet à activer.&quot;);</span>
+        }
+<span class="fc" id="L94">    }</span>
+
+    public void setContinuous(boolean isContinuous) {
+<span class="fc" id="L97">        this.isContinuous = isContinuous;</span>
+<span class="fc" id="L98">    }</span>
+
+    /**
+     * Retourne une représentation textuelle de la carte Piège,
+     * incluant son type, son caractère continu et son effet.
+     *
+     * @return une chaîne décrivant la carte Piège
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L108">        String base = &quot;Duelliste &quot; + getOwner().getName() + &quot; joue: \n&quot; +</span>
+<span class="fc" id="L109">                      getName() + &quot; - &quot; + getDescription() +</span>
+                      &quot;\nType de Piège: &quot; + trapType;
+
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        if (isContinuous) {</span>
+<span class="fc" id="L113">            base += &quot; (Continue)&quot;;</span>
+        }
+
+<span class="fc" id="L116">        base += &quot; / Password: &quot; + getCardId();</span>
+<span class="fc" id="L117">        base += &quot;\nEffet: &quot; + effect.getDescription();</span>
+
+<span class="fc" id="L119">        return base;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

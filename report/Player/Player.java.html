@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Player.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">Player</a> &gt; <span class="el_source">Player.java</span></div><h1>Player.java</h1><pre class="source lang-java linenums">package Player;
+
+import Deck.Deck;
+import Deck.ExtraDeck;
+import Hand.Hand;
+import Board.Board;
+import Card.MonsterCard;
+import Card.SpellCard;
+import Card.TrapCard;
+import Card.Card;
+import Card.Position;
+
+/**
+ * Représente un joueur dans une partie de Yu-Gi-Oh!.
+ * &lt;p&gt;
+ * La classe {@code Player} gère l'identité du joueur (nom), ses points de vie,
+ * et servira de point central pour ses zones de jeu (Deck, Extra Deck, Main, Board).
+ * Elle sera également responsable des actions qu'un joueur peut effectuer
+ * pendant les différentes phases du tour (pioche, invocation, activation de cartes, etc.).
+ *
+ * &lt;h2&gt;Responsabilités&lt;/h2&gt;
+ * &lt;ul&gt;
+ *   &lt;li&gt;Stocker le nom et les points de vie du joueur.&lt;/li&gt;
+ *   &lt;li&gt;Initialiser les points de vie à 8000 au début de la partie.&lt;/li&gt;
+ *   &lt;li&gt;Fournir des méthodes d'accès au nom et aux points de vie.&lt;/li&gt;
+ *   &lt;li&gt;À terme : gérer les zones de jeu (Deck, ExtraDeck, Hand, Board).&lt;/li&gt;
+ *   &lt;li&gt;À terme : gérer les actions de jeu (invocations, attaques, activation d'effets).&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * &lt;h2&gt;Relations prévues&lt;/h2&gt;
+ * &lt;ul&gt;
+ *   &lt;li&gt;Composition avec {@code Deck}, {@code ExtraDeck}, {@code Hand}, {@code Board}.&lt;/li&gt;
+ *   &lt;li&gt;Interaction avec {@code Graveyard} et {@code BanishedZone} via les actions de jeu.&lt;/li&gt;
+ *   &lt;li&gt;Coordination avec {@code Game} pour gérer les phases et conditions de victoire.&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * @author Nicolas
+ * @version 1.0 (structure initiale)
+ */
+
+public class Player {
+
+    /** Nom du joueur */
+    private String name;
+
+    /** Points de vie du joueur */
+    private int lifePoints;
+
+    /** Pioche principale */
+    private Deck deck;
+
+    /** Deck spécial (Fusion, Synchro, XYZ, Lien) */
+    private ExtraDeck extraDeck;
+
+    /** Main du joueur */
+    private Hand hand;
+
+    /** Terrain du joueur */
+    private Board board;
+
+    /** Indique si le joueur a déjà effectué son Invocation Normale ce tour */
+    private boolean hasPlayerNormalSummon;
+    
+
+    /**
+     * Constructeur du joueur.
+     *
+     * @param name       nom du joueur
+     * @param lifePoints points de vie initiaux
+     * @param deck       pioche principale
+     * @param extraDeck  deck spécial
+     */
+<span class="fc" id="L73">        public Player(String name, int lifePoints, Deck deck, ExtraDeck extraDeck) {</span>
+<span class="fc" id="L74">        this.name = name;</span>
+<span class="fc" id="L75">        this.lifePoints = lifePoints;</span>
+<span class="fc" id="L76">        this.deck = deck;                    // utilise le deck fourni</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        this.extraDeck = extraDeck != null ? extraDeck : new ExtraDeck();</span>
+<span class="fc" id="L78">        this.hand = new Hand();</span>
+<span class="fc" id="L79">        this.board = new Board(this, this.deck, this.extraDeck);</span>
+<span class="fc" id="L80">        this.hasPlayerNormalSummon = false;</span>
+<span class="fc" id="L81">    }</span>
+
+<span class="fc" id="L83">    public Player(String name) {</span>
+<span class="fc" id="L84">        this.name = name;</span>
+<span class="fc" id="L85">        this.lifePoints = 8000;</span>
+        // si tu n’as pas de constructeur Deck(), ne crée pas de deck ici
+        // laisse la responsabilité à Game.startGame() ou à un setter
+<span class="fc" id="L88">        this.hand = new Hand();</span>
+<span class="fc" id="L89">        this.extraDeck = new ExtraDeck();</span>
+        // board ne peut pas être correctement initialisé sans deck
+        // initialise-le uniquement quand un deck est disponible
+<span class="fc" id="L92">    }</span>
+
+    // --- Getters de base ---
+<span class="fc" id="L95">    public String getName() { return name; }</span>
+<span class="fc" id="L96">    public int getLifePoints() { return lifePoints; }</span>
+<span class="fc" id="L97">    public Board getBoard() { return board; }</span>
+<span class="fc" id="L98">    public boolean hasNormalSummoned() { return hasPlayerNormalSummon; }</span>
+
+    public Hand getHand() {
+<span class="fc" id="L101">        return hand;</span>
+    }
+
+    // --- Gestion des points de vie ---
+    public void increaseLifePoints(int amount) {
+<span class="fc" id="L106">        lifePoints += amount;</span>
+<span class="fc" id="L107">        System.out.println(name + &quot; gagne &quot; + amount + &quot; LP. Total: &quot; + lifePoints);</span>
+<span class="fc" id="L108">    }</span>
+
+    public void decreaseLifePoints(int amount) {
+<span class="fc" id="L111">        lifePoints -= amount;</span>
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        if (lifePoints &lt; 0) lifePoints = 0;</span>
+<span class="fc" id="L113">        System.out.println(name + &quot; perd &quot; + amount + &quot; LP. Total: &quot; + lifePoints);</span>
+<span class="fc" id="L114">    }</span>
+
+    public boolean isAlive() {
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        return lifePoints &gt; 0;</span>
+    }
+
+    public void setDeck(Deck deck) {
+<span class="fc" id="L121">        this.deck = deck;</span>
+<span class="fc" id="L122">        this.board = new Board(this, this.deck, this.extraDeck);</span>
+<span class="fc" id="L123">    }</span>
+
+    // --- Actions de base (squelettes à compléter plus tard) ---
+    public void drawCard() {
+<span class="fc" id="L127">        Card drawn = deck.draw();</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (drawn != null) {</span>
+<span class="fc" id="L129">            hand.addCard(drawn);</span>
+<span class="fc" id="L130">            System.out.println(name + &quot; pioche: &quot; + drawn.getName());</span>
+        }
+<span class="fc" id="L132">    }</span>
+
+    public void summonMonster(MonsterCard card) {
+<span class="fc bfc" id="L135" title="All 2 branches covered.">        if (!hasPlayerNormalSummon) {</span>
+<span class="fc" id="L136">            board.placeMonster(card, 0, Position.ATTACK); // exemple: zone 0</span>
+<span class="fc" id="L137">            hasPlayerNormalSummon = true;</span>
+<span class="fc" id="L138">            System.out.println(name + &quot; invoque &quot; + card.getName());</span>
+        } else {
+<span class="fc" id="L140">            System.out.println(name + &quot; a déjà invoqué normalement ce tour.&quot;);</span>
+        }
+<span class="fc" id="L142">    }</span>
+
+    public void playSpell(SpellCard card) {
+<span class="fc" id="L145">        board.activateSpell(card);</span>
+<span class="fc" id="L146">    }</span>
+
+    public void activateTrap(TrapCard card) {
+<span class="fc" id="L149">        board.activateTrap(card);</span>
+<span class="fc" id="L150">    }</span>
+
+    public void endTurn() {
+<span class="fc" id="L153">        hasPlayerNormalSummon = false;</span>
+<span class="fc" id="L154">        System.out.println(name + &quot; termine son tour.&quot;);</span>
+<span class="fc" id="L155">    }</span>
+
+    public Deck getDeck() {
+<span class="fc" id="L158">        return deck;</span>
+    }
+
+    public ExtraDeck getExtraDeck() {
+<span class="fc" id="L162">        return extraDeck;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

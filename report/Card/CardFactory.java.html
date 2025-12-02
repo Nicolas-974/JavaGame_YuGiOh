@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CardFactory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">Card</a> &gt; <span class="el_source">CardFactory.java</span></div><h1>CardFactory.java</h1><pre class="source lang-java linenums">package Card;
+import Player.Player;
+import Card.MonsterCard;
+import Card.SpellCard;
+import Card.TrapCard;
+import Card.Effect;
+
+<span class="nc" id="L8">public class CardFactory {</span>
+
+
+    // Exemple de monstre emblématique
+    public static MonsterCard createDarkMagician(Player owner) {
+<span class="fc" id="L13">        MonsterCard card = new MonsterCard(</span>
+            &quot;Dark Magician&quot;,
+            &quot;The ultimate wizard in terms of attack and defense.&quot;,
+            46986414,
+            owner,
+            2500, 2100, 7,
+            &quot;DARK&quot;, &quot;Spellcaster&quot;, &quot;Normal&quot;
+        );
+
+<span class="fc" id="L22">        return card;</span>
+    }
+
+    public static MonsterCard createBlueEyes(Player owner) {
+<span class="fc" id="L26">        MonsterCard card = new MonsterCard(</span>
+            &quot;Blue-Eyes White Dragon&quot;,
+            &quot;This legendary dragon is a powerful engine of destruction. Virtually invincible, very few have faced this awesome creature and lived to tell the tale.&quot;,
+            89631139,
+            owner,
+            3000, 2500, 8,
+            &quot;LIGHT&quot;, &quot;Dragon&quot;, &quot;Normal&quot;
+        );
+
+<span class="fc" id="L35">        return card;</span>
+    }
+
+    public static MonsterCard createWallOfIlluion(Player owner) {
+
+<span class="fc" id="L40">        Effect returnHand = new Effect(&quot;Returns from your opponent's field to your opponent's hand&quot;, &quot;Trigger&quot;);</span>
+
+
+<span class="fc" id="L43">        MonsterCard card = new MonsterCard(</span>
+            &quot;Wall of Illusion&quot;,
+            &quot;If this card is attacked by a monster, after damage calculation: Return that monster to the hand.&quot;,
+            13945283,
+            owner,
+            1000, 1850, 4,
+            &quot;DARK&quot;, &quot;Fiend&quot;, &quot;Effect&quot;,
+            returnHand,
+            &quot;Trigger&quot;
+        );
+
+<span class="fc" id="L54">        return card;</span>
+    }
+
+    public static MonsterCard monster2(Player owner) {
+
+<span class="fc" id="L59">        Effect reveal = new Effect(&quot;Reveals face-down cards&quot;, &quot;Trigger&quot;);</span>
+
+
+<span class="fc" id="L62">        MonsterCard card = new MonsterCard(</span>
+            &quot;The Stern Mystic&quot;,
+            &quot;FLIP: Reveal all face-down cards on the field (Flip Effects are not activated), then return them to their original positions.&quot;,
+            87557188,
+            owner,
+            1500, 1200, 4,
+            &quot;LIGHT&quot;, &quot;Spellcaster&quot;, &quot;Flip&quot;, &quot;Effect&quot;,
+            reveal,
+            &quot;Flip&quot;
+        );
+
+<span class="fc" id="L73">        return card;</span>
+    }
+
+    public static SpellCard spell1(Player owner) {
+
+<span class="fc" id="L78">        Effect specialSummon = new Effect(&quot;Special Summons from your Graveyar/opponent's Graveyard to your field&quot;, &quot;Trigger&quot;);</span>
+
+
+<span class="fc" id="L81">        SpellCard card = new SpellCard(</span>
+            &quot;Monster Reborn&quot;,
+            &quot;Target 1 monster in either GY; Special Summon it.&quot;,
+            83764719,
+            owner,
+            &quot;Normal&quot;,
+            specialSummon,
+            false
+        );
+
+<span class="fc" id="L91">        return card;</span>
+    }
+
+    public static SpellCard spell2(Player owner) {
+
+<span class="fc" id="L96">        Effect equip = new Effect(&quot;Equipped gains ATK / Equipped gains DEF&quot;, &quot;Trigger&quot;);</span>
+
+
+<span class="fc" id="L99">        SpellCard card = new SpellCard(</span>
+            &quot;Book of Secret Arts&quot;,
+            &quot;A Spellcaster-Type monster equipped with this card increases its ATK and DEF by 300 points.&quot;,
+            91595718,
+            owner,
+            &quot;Equip&quot;,
+            equip,
+            true
+        );
+
+<span class="fc" id="L109">        return card;</span>
+    }
+
+    public static SpellCard spell3(Player owner) {
+
+<span class="fc" id="L114">        Effect typeBooster = new Effect(&quot;All monsters gain ATK / All monsters gain DEF / All monsters lose ATK / All monsters lose DEF&quot;, &quot;Trigger&quot;);</span>
+
+
+<span class="fc" id="L117">        SpellCard card = new SpellCard(</span>
+            &quot;Yami&quot;,
+            &quot;All Fiend and Spellcaster monsters on the field gain 200 ATK/DEF, also all Fairy monsters on the field lose 200 ATK/DEF.&quot;,
+            59197169,
+            owner,
+            &quot;Field&quot;,
+            typeBooster,
+            true
+        );
+
+<span class="fc" id="L127">        return card;</span>
+    }
+
+    public static TrapCard trap1(Player owner) {
+
+<span class="fc" id="L132">        Effect destroy = new Effect(&quot;Destroys your opponent's Attack Position Monster Cards&quot;, &quot;Trigger&quot;);</span>
+
+
+<span class="fc" id="L135">        TrapCard card = new TrapCard(</span>
+            &quot;Mirror Force&quot;,
+            &quot;When an opponent's monster declares an attack: Destroy all your opponent's Attack Position monsters.&quot;,
+            44095762,
+            owner,
+            &quot;Normal&quot;,
+            destroy,
+            false
+        );
+
+<span class="fc" id="L145">        return card;</span>
+    }
+
+    public static TrapCard trap2(Player owner) {
+
+<span class="fc" id="L150">        Effect extraSummon = new Effect(&quot;Allows multiple Normal Summons / Performs a Normal Summon / Performs a Normal Set&quot;, &quot;Trigger&quot;);</span>
+
+
+<span class="fc" id="L153">        TrapCard card = new TrapCard(</span>
+            &quot;Ultimate Offering&quot;,
+            &quot;During your Main Phase or your opponent's Battle Phase: You can pay 500 Life Points; immediately after this effect resolves, Normal Summon/Set 1 monster.&quot;,
+            44095762,
+            owner,
+            &quot;Continuous&quot;,
+            extraSummon,
+            true
+        );
+
+<span class="fc" id="L163">        return card;</span>
+    }
+
+    public static MonsterCard createFusionMonster(Player owner) {
+<span class="fc" id="L167">    return new MonsterCard(</span>
+        &quot;Gaia the Dragon Champion&quot;,
+        &quot;Gaia the Fierce Knight + Curse of Dragon&quot;,
+        66889139,          // ID officiel de la carte
+        owner,
+        2600,              // ATK
+        2100,              // DEF
+        7,                 // Niveau
+        &quot;WIND&quot;,            // Attribut
+        &quot;Dragon&quot;,          // Type
+        &quot;Fusion&quot;           // Sous-type
+    );
+}
+
+    
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

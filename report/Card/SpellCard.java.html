@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SpellCard.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">Card</a> &gt; <span class="el_source">SpellCard.java</span></div><h1>SpellCard.java</h1><pre class="source lang-java linenums">package Card;
+import Player.Player;
+
+
+/**
+ * Représente une carte Magie dans le jeu Yu-Gi-Oh!.
+ * &lt;p&gt;
+ * La classe {@code SpellCard} hérite de {@link Card} et ajoute des attributs
+ * spécifiques aux cartes Magie, comme leur type (Normal, Jeu-Rapide, Équipement,
+ * Terrain, Rituel, etc.), leur effet et leur caractère continu ou non.
+ *
+ * &lt;h2&gt;Responsabilités&lt;/h2&gt;
+ * &lt;ul&gt;
+ *   &lt;li&gt;Stocker le type de la carte Magie.&lt;/li&gt;
+ *   &lt;li&gt;Gérer l’effet associé à la carte.&lt;/li&gt;
+ *   &lt;li&gt;Indiquer si la carte reste sur le terrain après activation (Magie Continue, Terrain, Équipement).&lt;/li&gt;
+ *   &lt;li&gt;Permettre l’activation de l’effet de la carte.&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * &lt;h2&gt;Relations&lt;/h2&gt;
+ * &lt;ul&gt;
+ *   &lt;li&gt;Héritage : hérite de la classe abstraite {@link Card}.&lt;/li&gt;
+ *   &lt;li&gt;Association : chaque carte Magie peut avoir un {@link Effect} spécifique.&lt;/li&gt;
+ *   &lt;li&gt;Interaction : posée ou activée depuis la main sur le {@code Board} du joueur.&lt;/li&gt;
+ *   &lt;li&gt;Interaction : utilisée par un {@link Player} pour influencer le terrain, les monstres ou les points de vie.&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * @author Nicolas
+ * @version 1.0
+ */
+public class SpellCard extends Card {
+
+    /** Type de la carte Magie (ex : Normal, Jeu-Rapide, Équipement, Terrain, Rituel). */
+    private String spellType;
+
+    /** Effet associé à la carte Magie. */
+    private Effect effect;
+
+    /** Indique si la carte Magie reste sur le terrain après activation (ex : Magie Continue, Terrain, Équipement). */
+    private boolean isContinuous;
+
+    /**
+     * Constructeur d’une carte Magie.
+     *
+     * @param name        nom de la carte
+     * @param description description ou effet de la carte
+     * @param cardId      identifiant unique
+     * @param owner       joueur propriétaire
+     * @param spellType   type de la carte Magie (Normal, Jeu-Rapide, etc.)
+     * @param effect      effet associé à la carte
+     * @param isContinuous true si la carte reste sur le terrain après activation
+     */
+    public SpellCard(String name, String description, int cardId, Player owner,
+                     String spellType, Effect effect, boolean isContinuous) {
+<span class="fc" id="L55">        super(name, description, cardId, owner);</span>
+<span class="fc" id="L56">        this.spellType = spellType;</span>
+<span class="fc" id="L57">        this.effect = effect;</span>
+<span class="fc" id="L58">        this.isContinuous = isContinuous;</span>
+<span class="fc" id="L59">    }</span>
+
+    /** @return le type de la carte Magie */
+<span class="fc" id="L62">    public String getSpellType() { return spellType; }</span>
+
+    /** @return true si la carte est continue (reste sur le terrain après activation) */
+<span class="fc" id="L65">    public boolean isContinuous() { return isContinuous; }</span>
+
+    /** @return l’effet associé à la carte Magie */
+<span class="fc" id="L68">    public Effect getEffect() { return effect; }</span>
+
+    /** 
+     * Associe un effet à la carte Magie.
+     * 
+     * @param effect l'effet à lier à cette carte
+     */
+    public void setEffect(Effect effect) {
+<span class="nc" id="L76">        this.effect = effect;</span>
+<span class="nc" id="L77">    }</span>
+
+    /**
+     * Active l’effet de la carte Magie.
+     * &lt;p&gt;
+     * Par défaut, affiche une description de l’effet. Désormais,
+     * appelle {@code effect.activate(...)} pour exécuter l’effet.
+     */
+    @Override
+    public void activateEffect() {
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (effect != null) {</span>
+<span class="fc" id="L88">            System.out.println(&quot;Activation de l'effet de Magie: &quot; + effect.getDescription());</span>
+            // Exemple d'appel : la carte elle-même est la source, pas forcément de cible
+<span class="fc" id="L90">            effect.activate(this, null, getOwner().getBoard()); </span>
+        } else {
+<span class="nc" id="L92">            System.out.println(getName() + &quot; n’a pas d’effet à activer.&quot;);</span>
+        }
+<span class="fc" id="L94">    }</span>
+
+    /**
+     * Retourne une représentation textuelle de la carte Magie,
+     * incluant son type, son caractère continu et son effet.
+     *
+     * @return une chaîne décrivant la carte Magie
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L104">        String base = &quot;Duelliste &quot; + getOwner().getName() + &quot; joue: \n&quot; +</span>
+<span class="fc" id="L105">                      getName() + &quot; - &quot; + getDescription() +</span>
+                      &quot;\nType de Magie: &quot; + spellType;
+
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        if (isContinuous) {</span>
+<span class="fc" id="L109">            base += &quot; (Continue)&quot;;</span>
+        }
+
+<span class="fc" id="L112">        base += &quot; / Password: &quot; + getCardId();</span>
+<span class="fc" id="L113">        base += &quot;\nEffet: &quot; + effect.getDescription();</span>
+
+<span class="fc" id="L115">        return base;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

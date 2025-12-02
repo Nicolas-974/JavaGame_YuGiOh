@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExtraDeck.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">Deck</a> &gt; <span class="el_source">ExtraDeck.java</span></div><h1>ExtraDeck.java</h1><pre class="source lang-java linenums">package Deck;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import Card.Card;
+import Card.MonsterCard;
+
+/**
+ * Classe représentant l’Extra Deck d’un joueur.
+ * Contient les cartes Fusion, Synchro, XYZ et Lien.
+ */
+public class ExtraDeck {
+
+    // --- Attributs ---
+    private List&lt;Card&gt; cards;
+
+    // --- Constructeur ---
+<span class="fc" id="L19">    public ExtraDeck() {</span>
+<span class="fc" id="L20">        this.cards = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L21">    }</span>
+
+<span class="fc" id="L23">    public ExtraDeck(List&lt;Card&gt; initialCards) {</span>
+<span class="fc" id="L24">        this.cards = new ArrayList&lt;&gt;(initialCards);</span>
+<span class="fc" id="L25">    }</span>
+
+    // --- Méthodes principales ---
+
+    /** Ajoute une carte à l’Extra Deck */
+    public void addCard(Card c) {
+<span class="fc" id="L31">        cards.add(c);</span>
+<span class="fc" id="L32">        System.out.println(&quot;Carte ajoutée à l’Extra Deck: &quot; + c.getName());</span>
+<span class="fc" id="L33">    }</span>
+
+    /** Retire une carte spécifique de l’Extra Deck */
+    public boolean removeCard(Card c) {
+<span class="fc" id="L37">        return cards.remove(c);</span>
+    }
+
+    /** Sélectionne une carte par son index (utile pour invocation spéciale) */
+    public Card chooseCard(int index) {
+<span class="fc bfc" id="L42" title="All 4 branches covered.">        if (index &lt; 0 || index &gt;= cards.size()) {</span>
+<span class="fc" id="L43">            System.out.println(&quot;Index invalide dans l’Extra Deck.&quot;);</span>
+<span class="fc" id="L44">            return null;</span>
+        }
+<span class="fc" id="L46">        return cards.get(index);</span>
+    }
+
+    /** Mélange les cartes de l’Extra Deck */
+    public void shuffle() {
+<span class="fc" id="L51">        Collections.shuffle(cards);</span>
+<span class="fc" id="L52">        System.out.println(&quot;L’Extra Deck est mélangé.&quot;);</span>
+<span class="fc" id="L53">    }</span>
+
+    /** Retourne le nombre de cartes dans l’Extra Deck */
+    public int size() {
+<span class="fc" id="L57">        return cards.size();</span>
+    }
+
+    /** Vérifie si l’Extra Deck est vide */
+    public boolean isEmpty() {
+<span class="fc" id="L62">        return cards.isEmpty();</span>
+    }
+
+    /** Retourne toutes les cartes de l’Extra Deck */
+    public List&lt;Card&gt; getAllCards() {
+<span class="fc" id="L67">        return cards;</span>
+    }
+
+    /** Recherche les cartes Extra par sous-type (Fusion, Synchro, XYZ, Lien) */
+    public List&lt;Card&gt; searchBySubType(String subType) {
+<span class="fc" id="L72">        List&lt;Card&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        for (Card c : cards) {</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">            if (c instanceof MonsterCard) {</span>
+<span class="fc" id="L75">                MonsterCard m = (MonsterCard) c;</span>
+<span class="fc" id="L76">                String st = m.getMonsterType(); // &lt;-- correction</span>
+<span class="pc bpc" id="L77" title="1 of 4 branches missed.">                if (st != null &amp;&amp; st.equalsIgnoreCase(subType)) {</span>
+<span class="fc" id="L78">                    result.add(c);</span>
+                }
+            }
+<span class="fc" id="L81">        }</span>
+<span class="fc" id="L82">        return result;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

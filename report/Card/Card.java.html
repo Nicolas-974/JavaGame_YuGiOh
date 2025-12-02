@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Card.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">Card</a> &gt; <span class="el_source">Card.java</span></div><h1>Card.java</h1><pre class="source lang-java linenums">package Card;
+import Player.Player;
+/**
+ * Classe abstraite représentant une carte générique dans le jeu Yu-Gi-Oh!.
+ * &lt;p&gt;
+ * La classe {@code Card} est la super-classe de toutes les cartes du jeu
+ * (Monstres, Magies, Pièges). Elle définit les attributs et comportements
+ * communs à toutes les cartes et sert de base pour les spécialisations
+ * {@link MonsterCard}, {@link SpellCard}, {@link TrapCard}.
+ *
+ * &lt;h2&gt;Responsabilités&lt;/h2&gt;
+ * &lt;ul&gt;
+ *   &lt;li&gt;Stocker les informations de base d'une carte (nom, description, identifiant).&lt;/li&gt;
+ *   &lt;li&gt;Gérer le propriétaire de la carte ({@link Player}).&lt;/li&gt;
+ *   &lt;li&gt;Gérer l'état recto/verso de la carte.&lt;/li&gt;
+ *   &lt;li&gt;Fournir une méthode abstraite {@link #activateEffect()} que chaque sous-classe doit implémenter.&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * &lt;h2&gt;Relations&lt;/h2&gt;
+ * &lt;ul&gt;
+ *   &lt;li&gt;Héritage : {@link MonsterCard}, {@link SpellCard}, {@link TrapCard} héritent de cette classe.&lt;/li&gt;
+ *   &lt;li&gt;Association : chaque carte appartient à un {@link Player}.&lt;/li&gt;
+ *   &lt;li&gt;Interaction : les cartes circulent entre les zones de jeu (Deck, Main, Board, Cimetière, Zone Bannie).&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * @author Nicolas
+ * @version 1.0
+ */
+public abstract class Card {
+
+    /** Nom de la carte. */
+    private final String name;
+
+    /** Texte descriptif ou effet de la carte. */
+    private final String description;
+
+    /** Identifiant unique de la carte. */
+    private final int cardId;
+
+    /** Joueur propriétaire de la carte. */
+    private Player owner;
+
+    /** Indique si la carte est posée face verso (true = face cachée). */
+    private boolean isFaceDown;
+
+    /**
+     * Constructeur de base pour une carte.
+     *
+     * @param name        le nom de la carte
+     * @param description le texte descriptif ou effet de la carte
+     * @param cardId      identifiant unique de la carte
+     * @param owner       joueur propriétaire de la carte
+     */
+<span class="fc" id="L54">    public Card(String name, String description, int cardId, Player owner) {</span>
+<span class="fc" id="L55">        this.name = name;</span>
+<span class="fc" id="L56">        this.description = description;</span>
+<span class="fc" id="L57">        this.cardId = cardId;</span>
+<span class="fc" id="L58">        this.owner = owner;</span>
+<span class="fc" id="L59">        this.isFaceDown = false; // par défaut face recto</span>
+<span class="fc" id="L60">    }</span>
+
+    /** @return le nom de la carte */
+<span class="fc" id="L63">    public String getName() { return name; }</span>
+
+    /** @return la description de la carte */
+<span class="fc" id="L66">    public String getDescription() { return description; }</span>
+
+    /** @return l'identifiant unique de la carte */
+<span class="fc" id="L69">    public int getCardId() { return cardId; }</span>
+
+    /** @return le joueur propriétaire de la carte */
+<span class="fc" id="L72">    public Player getOwner() { return owner; }</span>
+
+    /**
+     * Définit le propriétaire de la carte.
+     *
+     * @param owner le nouveau propriétaire
+     */
+<span class="fc" id="L79">    public void setOwner(Player owner) { this.owner = owner; }</span>
+
+    /**
+     * Définit si la carte est posée face verso.
+     *
+     * @param value true si la carte est face verso, false si elle est face recto
+     */
+<span class="nc" id="L86">    public void setFaceDown(boolean value) { this.isFaceDown = value; }</span>
+
+    /** @return true si la carte est posée face verso, false sinon */
+<span class="nc" id="L89">    public boolean isFaceDown() { return isFaceDown; }</span>
+
+    /**
+     * Inverse l'état recto/verso de la carte (utile pour les monstres FLIP).
+     */
+<span class="nc bnc" id="L94" title="All 2 branches missed.">    public void flip() { this.isFaceDown = !this.isFaceDown; }</span>
+
+    /**
+     * Méthode abstraite que chaque sous-classe doit implémenter
+     * pour définir l'effet spécifique de la carte.
+     */
+    public abstract void activateEffect();
+
+    /**
+     * Retourne une représentation textuelle de la carte.
+     * &lt;p&gt;
+     * Si la carte est face verso, retourne &quot;Carte face cachée&quot;.
+     * Sinon, retourne le nom et la description de la carte.
+     *
+     * @return une chaîne décrivant la carte
+     */
+    @Override
+    public String toString() {
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        if (isFaceDown) return &quot;Carte face cachée&quot;;</span>
+<span class="nc" id="L113">        return name + &quot; - &quot; + description + &quot; (Face-Up)&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

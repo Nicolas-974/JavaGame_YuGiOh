@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Hand.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">Hand</a> &gt; <span class="el_source">Hand.java</span></div><h1>Hand.java</h1><pre class="source lang-java linenums">package Hand;
+
+import java.util.ArrayList;
+import java.util.List;
+import Card.Card;
+
+/**
+ * Classe représentant la main d’un joueur.
+ * Elle gère les cartes actuellement disponibles pour être jouées, posées ou défaussées.
+ */
+public class Hand {
+
+    // --- Attributs ---
+    private List&lt;Card&gt; cards;
+
+    // --- Constructeur ---
+<span class="fc" id="L17">    public Hand() {</span>
+<span class="fc" id="L18">        this.cards = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L19">    }</span>
+
+    // --- Méthodes principales ---
+
+    /** Ajoute une carte à la main (souvent après une pioche) */
+    public void addCard(Card c) {
+<span class="fc" id="L25">        cards.add(c);</span>
+<span class="fc" id="L26">    }</span>
+
+    /** Retire une carte spécifique de la main */
+    public boolean removeCard(Card c) {
+<span class="fc" id="L30">        return cards.remove(c);</span>
+    }
+
+    /** Récupère une carte par son index */
+    public Card getCard(int index) {
+<span class="fc bfc" id="L35" title="All 4 branches covered.">        if (index &lt; 0 || index &gt;= cards.size()) {</span>
+<span class="fc" id="L36">            return null;</span>
+        }
+<span class="fc" id="L38">        return cards.get(index);</span>
+    }
+
+    /** Retourne toutes les cartes de la main */
+    public List&lt;Card&gt; getAllCards() {
+<span class="fc" id="L43">        return cards;</span>
+    }
+
+    /** Retourne le nombre de cartes en main */
+    public int size() {
+<span class="fc" id="L48">        return cards.size();</span>
+    }
+
+    /** Vérifie si la main est vide */
+    public boolean isEmpty() {
+<span class="fc" id="L53">        return cards.isEmpty();</span>
+    }
+
+    /** Vérifie si une carte donnée est présente en main */
+    public boolean contains(Card c) {
+<span class="fc" id="L58">        return cards.contains(c);</span>
+    }
+
+    /** Défausse une carte (en l’envoyant au Cimetière) */
+    public boolean discard(Card c) {
+        // Pour l’instant, on simule juste la défausse en retirant la carte
+<span class="fc" id="L64">        return removeCard(c);</span>
+    }
+
+    /** Vide complètement la main (utile en cas de reset de partie) */
+    public void clear() {
+<span class="fc" id="L69">        cards.clear();</span>
+<span class="fc" id="L70">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

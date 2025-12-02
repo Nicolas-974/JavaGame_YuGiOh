@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Effect.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">Card</a> &gt; <span class="el_source">Effect.java</span></div><h1>Effect.java</h1><pre class="source lang-java linenums">package Card;
+import Board.Board;
+
+/**
+ * Classe représentant un effet générique associé à une carte.
+ * Décrit le texte et le type de l'effet.
+ */
+public class Effect {
+
+    /** Texte décrivant l’effet. */
+    private String description;
+
+    /** Type d’effet (ex : Continu, Déclencheur, Rapide, etc.). */
+    private String effectType;
+
+    /**
+     * Constructeur d'un effet.
+     *
+     * @param description texte décrivant l'effet
+     * @param effectType  type d'effet (Continu, Déclencheur, Rapide, etc.)
+     */
+<span class="fc" id="L22">    public Effect(String description, String effectType) {</span>
+<span class="fc" id="L23">        this.description = description;</span>
+<span class="fc" id="L24">        this.effectType = effectType;</span>
+<span class="fc" id="L25">    }</span>
+
+    /** @return la description de l’effet */
+    public String getDescription() {
+<span class="fc" id="L29">        return description;</span>
+    }
+
+    /** @return le type de l’effet */
+    public String getEffectType() {
+<span class="nc" id="L34">        return effectType;</span>
+    }
+
+    /**
+     * Applique l’effet de la carte source sur une cible et/ou le terrain.
+     *
+     * @param source carte qui déclenche l'effet
+     * @param target carte ciblée par l'effet (peut être null)
+     * @param board  plateau de jeu concerné
+     */
+    public void activate(Card source, Card target, Board board) {
+<span class="fc" id="L45">        System.out.println(&quot;Activation de l'effet: &quot; + description +</span>
+                           &quot; [Type: &quot; + effectType + &quot;]&quot;);
+        // TODO: implémenter la logique spécifique selon le type d’effet
+<span class="fc" id="L48">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

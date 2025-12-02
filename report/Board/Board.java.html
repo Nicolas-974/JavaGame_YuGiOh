@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Board.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo Coverage Report</a> &gt; <a href="index.source.html" class="el_package">Board</a> &gt; <span class="el_source">Board.java</span></div><h1>Board.java</h1><pre class="source lang-java linenums">package Board;
+
+import Card.Card;
+import Card.MonsterCard;
+import Card.SpellCard;
+import Card.TrapCard;
+import Deck.Deck;
+import Deck.ExtraDeck;
+import Graveyard.Graveyard;
+import BanishedZone.BanishedZone;
+import Player.Player;
+import Card.Position;
+
+/**
+ * Classe représentant le terrain de jeu d’un joueur.
+ */
+public class Board {
+
+    // --- Attributs ---
+<span class="fc" id="L20">    private MonsterCard[] monsterZones = new MonsterCard[5];</span>
+<span class="fc" id="L21">    private Card[] spellTrapZones = new Card[5];</span>
+    private Deck deck;
+    private ExtraDeck extraDeck;
+    private Graveyard graveyard;
+    private BanishedZone banishedZone;
+    private Card fieldZone;
+    private Player owner;
+    private MonsterCard lastSummonedMonster;
+    private Card lastDestroyedCard;
+
+    // --- Constructeur ---
+<span class="fc" id="L32">    public Board(Player owner, Deck deck, ExtraDeck extraDeck) {</span>
+<span class="fc" id="L33">        this.owner = owner;</span>
+<span class="fc" id="L34">        this.deck = deck;</span>
+<span class="fc" id="L35">        this.extraDeck = extraDeck;</span>
+<span class="fc" id="L36">        this.graveyard = new Graveyard();</span>
+<span class="fc" id="L37">        this.banishedZone = new BanishedZone();</span>
+<span class="fc" id="L38">        this.fieldZone = null;</span>
+<span class="fc" id="L39">    }</span>
+
+// --- Gestion des monstres ---
+    public void placeMonster(MonsterCard card, int zoneIndex, Position pos) {
+<span class="fc bfc" id="L43" title="All 4 branches covered.">        if (zoneIndex &lt; 0 || zoneIndex &gt;= monsterZones.length) {</span>
+<span class="fc" id="L44">            System.out.println(&quot;Zone de monstre invalide.&quot;);</span>
+<span class="fc" id="L45">            return;</span>
+        }
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (monsterZones[zoneIndex] == null) {</span>
+<span class="fc" id="L48">            monsterZones[zoneIndex] = card;</span>
+<span class="fc" id="L49">            card.setPosition(pos);</span>
+<span class="fc" id="L50">            lastSummonedMonster = card;</span>
+<span class="fc" id="L51">            System.out.println(owner.getName() + &quot; invoque &quot; + card.getName() + &quot; en &quot; + pos);</span>
+        } else {
+<span class="fc" id="L53">            System.out.println(&quot;La zone de monstre &quot; + zoneIndex + &quot; est déjà occupée.&quot;);</span>
+        }
+<span class="fc" id="L55">    }</span>
+
+    public MonsterCard getLastSummonedMonster() {
+<span class="fc" id="L58">        return lastSummonedMonster;</span>
+    }
+
+    public MonsterCard removeMonster(int zoneIndex) {
+<span class="pc bpc" id="L62" title="2 of 4 branches missed.">        if (zoneIndex &lt; 0 || zoneIndex &gt;= monsterZones.length) return null;</span>
+<span class="fc" id="L63">        MonsterCard removed = monsterZones[zoneIndex];</span>
+<span class="fc" id="L64">        monsterZones[zoneIndex] = null;</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (removed != null) {</span>
+<span class="fc" id="L66">            lastDestroyedCard = removed;</span>
+<span class="fc" id="L67">            sendToGraveyard(removed);</span>
+<span class="fc" id="L68">            System.out.println(removed.getName() + &quot; est détruit et envoyé au Cimetière.&quot;);</span>
+        }
+<span class="fc" id="L70">        return removed;</span>
+    }
+
+    public boolean isMonsterZoneFree(int zoneIndex) {
+<span class="pc bpc" id="L74" title="3 of 6 branches missed.">        return zoneIndex &gt;= 0 &amp;&amp; zoneIndex &lt; monsterZones.length &amp;&amp; monsterZones[zoneIndex] == null;</span>
+    }
+
+<span class="fc" id="L77">    public MonsterCard getMonster(int zoneIndex) { return monsterZones[zoneIndex]; }</span>
+
+    // --- Gestion des Magies/Pièges ---
+    public void setSpellTrap(Card card, int zoneIndex) {
+<span class="pc bpc" id="L81" title="1 of 4 branches missed.">        if (zoneIndex &lt; 0 || zoneIndex &gt;= spellTrapZones.length) {</span>
+<span class="fc" id="L82">            System.out.println(&quot;Zone Magie/Piège invalide.&quot;);</span>
+<span class="fc" id="L83">            return;</span>
+        }
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (spellTrapZones[zoneIndex] == null) {</span>
+<span class="fc" id="L86">            spellTrapZones[zoneIndex] = card;</span>
+<span class="fc" id="L87">            System.out.println(owner.getName() + &quot; pose une carte Magie/Piège: &quot; + card.getName());</span>
+        } else {
+<span class="fc" id="L89">            System.out.println(&quot;La zone Magie/Piège &quot; + zoneIndex + &quot; est déjà occupée.&quot;);</span>
+        }
+<span class="fc" id="L91">    }</span>
+
+    public void activateSpell(SpellCard card) {
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (card != null) {</span>
+<span class="fc" id="L95">            card.activateEffect();</span>
+<span class="fc" id="L96">            sendToGraveyard(card);</span>
+        }
+<span class="fc" id="L98">    }</span>
+
+    public void activateTrap(TrapCard card) {
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        if (card != null) {</span>
+<span class="fc" id="L102">            card.activateEffect();</span>
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">            if (!card.isContinuous()) {</span>
+<span class="fc" id="L104">                sendToGraveyard(card);</span>
+            }
+        }
+<span class="fc" id="L107">    }</span>
+
+
+    public Card removeSpellTrap(int zoneIndex) {
+<span class="pc bpc" id="L111" title="2 of 4 branches missed.">        if (zoneIndex &lt; 0 || zoneIndex &gt;= spellTrapZones.length) {</span>
+<span class="nc" id="L112">            System.out.println(&quot;Zone Magie/Piège invalide.&quot;);</span>
+<span class="nc" id="L113">            return null;</span>
+        }
+<span class="fc" id="L115">        Card removed = spellTrapZones[zoneIndex];</span>
+<span class="fc" id="L116">        spellTrapZones[zoneIndex] = null;</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        if (removed != null) {</span>
+<span class="fc" id="L118">            System.out.println(removed.getName() + &quot; est retirée de la zone Magie/Piège.&quot;);</span>
+        }
+<span class="fc" id="L120">        return removed;</span>
+    }
+<span class="fc bfc" id="L122" title="All 2 branches covered.">    public boolean isSpellTrapZoneFree(int zoneIndex) { return spellTrapZones[zoneIndex] == null; }</span>
+
+    // --- Gestion du Cimetière et Bannies ---
+    public void sendToGraveyard(Card card) {
+<span class="fc" id="L126">        graveyard.addCard(card);</span>
+<span class="fc" id="L127">        System.out.println(card.getName() + &quot; est envoyé au Cimetière.&quot;);</span>
+<span class="fc" id="L128">    }</span>
+
+    public void banishCard(Card card) {
+<span class="fc" id="L131">        banishedZone.addCard(card);</span>
+<span class="fc" id="L132">        System.out.println(card.getName() + &quot; est retiré du jeu (Banni).&quot;);</span>
+<span class="fc" id="L133">    }</span>
+
+    // --- Gestion du Deck et Extra Deck ---
+<span class="fc" id="L136">    public Card drawCard() { return deck.draw(); }</span>
+<span class="fc" id="L137">    public void shuffleDeck() { deck.shuffle(); }</span>
+<span class="fc" id="L138">    public int getDeckCount() { return deck.size(); }</span>
+<span class="nc" id="L139">    public int getExtraDeckCount() { return extraDeck.size(); }</span>
+
+    // --- Gestion de la zone de terrain ---
+<span class="fc" id="L142">    public void setFieldSpell(Card card) { this.fieldZone = card; }</span>
+<span class="fc" id="L143">    public void removeFieldSpell() { this.fieldZone = null; }</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">    public boolean isFieldZoneFree() { return fieldZone == null; }</span>
+
+    // --- Méthodes utilitaires ---
+
+    /** Retourne le nombre de monstres actuellement sur le terrain */
+    public int getMonsterCount() {
+<span class="fc" id="L150">        int count = 0;</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        for (MonsterCard monster : monsterZones) {</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">            if (monster != null) count++;</span>
+        }
+<span class="fc" id="L154">        return count;</span>
+    }
+
+    /** Retourne le nombre de cartes Magie/Piège actuellement sur le terrain */
+    public int getSpellTrapCount() {
+<span class="fc" id="L159">        int count = 0;</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        for (Card card : spellTrapZones) {</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">            if (card != null) count++;</span>
+        }
+<span class="fc" id="L163">        return count;</span>
+    }
+
+    /** Retourne le nombre total de cartes sur le terrain (monstres + magie/piège + terrain) */
+    public int getTotalCardsOnField() {
+<span class="fc" id="L168">        int total = getMonsterCount() + getSpellTrapCount();</span>
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">        if (fieldZone != null) total++;</span>
+<span class="fc" id="L170">        return total;</span>
+    }
+
+    /** Vide complètement le terrain (monstres, magie/piège, terrain) */
+    public void clearBoard() {
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        for (int i = 0; i &lt; monsterZones.length; i++) {</span>
+<span class="fc" id="L176">            monsterZones[i] = null;</span>
+        }
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        for (int i = 0; i &lt; spellTrapZones.length; i++) {</span>
+<span class="fc" id="L179">            spellTrapZones[i] = null;</span>
+        }
+<span class="fc" id="L181">        fieldZone = null;</span>
+<span class="fc" id="L182">        lastSummonedMonster = null;</span>
+<span class="fc" id="L183">        lastDestroyedCard = null;</span>
+<span class="fc" id="L184">        System.out.println(&quot;Le terrain de &quot; + owner.getName() + &quot; est vidé.&quot;);</span>
+<span class="fc" id="L185">    }</span>
+
+    /** Réinitialise le terrain (similaire à clearBoard, mais peut aussi réinitialiser les zones liées) */
+    public void resetBoard() {
+<span class="fc" id="L189">        clearBoard();</span>
+<span class="fc" id="L190">        graveyard = new Graveyard();</span>
+<span class="fc" id="L191">        banishedZone = new BanishedZone();</span>
+<span class="fc" id="L192">        System.out.println(&quot;Le terrain de &quot; + owner.getName() + &quot; est réinitialisé.&quot;);</span>
+<span class="fc" id="L193">    }</span>
+
+
+<span class="fc" id="L196">    public Deck getDeck() { return deck; }</span>
+<span class="fc" id="L197">    public Graveyard getGraveyard() { return graveyard; }</span>
+<span class="fc" id="L198">    public BanishedZone getBanished() { return banishedZone; }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
