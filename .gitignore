@@ -1,40 +1,69 @@
-# --- Java ---
 *.class
 *.jar
 *.war
 *.ear
 
-# --- Logs ---
+--- Logs ---
+
 *.log
 
-# --- OS files ---
+--- OS files ---
+
 .DS_Store
 Thumbs.db
 
-# --- IDEs ---
-# IntelliJ IDEA
+--- IDEs ---
+
+IntelliJ IDEA
+
 .idea/
 *.iml
 out/
 
-# Eclipse
+Eclipse
+
 .classpath
 .project
 .settings/
 
-# VS Code
+VS Code
+
 .vscode/
 
-# --- Build tools ---
-# Maven
+--- Build tools ---
+
+Maven
+
 target/
 
-# Gradle
+Gradle
+
 .gradle/
 build/
 
-# --- JavaFX SDK & binaires lourds ---
+--- JavaFX SDK & binaires lourds (Par défaut on ignore tout) ---
+
 *.dll
 *.so
 *.dylib
-javafx/
+
+--- EXCEPTIONS (Ce qu'on veut garder) ---
+
+1. Garder les librairies légères (Gson, JUnit) dans le dossier lib
+
+!lib/.jar
+!lib/.xml
+
+2. Garder la structure JavaFX (Squelette uniquement)
+
+On ignore TOUT le contenu du dossier javafx par sécurité (pour ne pas upload le SDK complet par erreur)
+
+javafx/**/*
+
+On fait une exception pour les dossiers eux-mêmes (pour garder la structure vide)
+
+!javafx/**/
+
+On fait une exception pour le fichier d'instructions (le fichier texte qu'on vient de créer)
+
+!javafx/**/README.txt
