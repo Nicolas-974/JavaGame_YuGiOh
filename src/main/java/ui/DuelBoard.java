@@ -1160,7 +1160,7 @@ public class DuelBoard extends Application {
                 actionZone.getChildren().addAll(activateBtn, graveyardBtn);
 
             } else {
-                // === Regular Spell/Trap Card Buttons ===
+                // === Regular Spell Card Buttons ===
                 Button activateBtn = new Button("Activate");
                 activateBtn.setOnAction(ev -> {
                     boolean faceDown = (boolean) placed.getProperties().getOrDefault("faceDown", true);
@@ -1197,6 +1197,44 @@ public class DuelBoard extends Application {
 
                 actionZone.getChildren().addAll(activateBtn, graveyardBtn);
             }
+        } else if (card instanceof TrapCard) {
+            // === Trap Card Buttons (NEW) ===
+            Button activateBtn = new Button("Activate");
+            activateBtn.setOnAction(ev -> {
+                boolean faceDown = (boolean) placed.getProperties().getOrDefault("faceDown", true);
+                if (faceDown) {
+                    placed.setImage(card.getImage());
+                    placed.setRotate(isOpponent ? 180 : 0);
+                    placed.getProperties().put("faceDown", false);
+                    cardInfoArea.setText("Activating Trap: " + card.getName());
+                    // Optionnel: Appeler un effet ici si vous en ajoutez un jour
+                } else {
+                    cardInfoArea.setText(card.getName() + " is already activated.");
+                }
+            });
+
+            Button graveyardBtn = new Button("Send to Graveyard");
+            graveyardBtn.setOnAction(ev -> {
+                Object origin = placed.getProperties().get("placedCell");
+                if (origin instanceof StackPane) {
+                    ((StackPane) origin).getChildren().remove(placed);
+                }
+                Node graveyardCell = boardTarget.getChildren().stream()
+                    .filter(node -> node.getStyleClass().contains("graveyard-zone"))
+                    .findFirst()
+                    .orElse(null);
+                if (graveyardCell instanceof StackPane) {
+                    StackPane graveyardZone = (StackPane) graveyardCell;
+                    ImageView graveyardView = new ImageView(card.getImage());
+                    graveyardView.setFitWidth(60);
+                    graveyardView.setFitHeight(90);
+                    graveyardView.getProperties().put("card", card);
+                    graveyardZone.getChildren().add(graveyardView);
+                }
+                cardInfoArea.setText(card.getName() + " sent to the Graveyard.");
+            });
+
+            actionZone.getChildren().addAll(activateBtn, graveyardBtn);
         }
     }
 
